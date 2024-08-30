@@ -17,6 +17,11 @@ fun MainScreen(viewModel: DataViewModel) {
     val analyticsData by viewModel.analyticsData.collectAsState()
     val categories by viewModel.categories.collectAsState()
 
+    // Convert strings to integers, sort them, and convert back to strings
+    val sortedCategories = categories
+        .mapNotNull { it.toIntOrNull() } // Convert to Int, ignore non-numeric values
+        .sorted() // Sort the integers
+        .map { it.toString() } // Convert back to String
     // Loading states
     val isBuildingInfoLoading by viewModel.isBuildingInfoLoading.collectAsState()
     val isAnalyticsDataLoading by viewModel.isAnalyticsDataLoading.collectAsState()
@@ -27,8 +32,6 @@ fun MainScreen(viewModel: DataViewModel) {
 
     var selectedOption by remember { mutableStateOf<String?>(null) }
     var selectedDropdownValue by remember { mutableStateOf<String?>(null) }
-
-    val filteredResults by viewModel.filteredAnalyticsData.collectAsState()
 
     Scaffold(
         topBar = {
@@ -62,7 +65,7 @@ fun MainScreen(viewModel: DataViewModel) {
 
                         val options = listOf("Manufacturer", "Country", "Category ID", "State")
 
-                        // First Row
+                        // First Row ---- creating two selectable options in 1st row
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
@@ -86,7 +89,7 @@ fun MainScreen(viewModel: DataViewModel) {
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Second Row
+                        // Second Row ------creating other two selectable options in 2nd row
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
@@ -138,7 +141,7 @@ fun MainScreen(viewModel: DataViewModel) {
                         }
                         "Category ID" -> DropdownMenu(
                             label = "Choose Category",
-                            items = categories.map { it.toString() },
+                            items = sortedCategories,
                             selectedItem = selectedDropdownValue
                         ) { value ->
                             selectedDropdownValue = value
@@ -153,6 +156,14 @@ fun MainScreen(viewModel: DataViewModel) {
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
+
+                    selectedDropdownValue?.let {
+                        Text(
+                            text = "You have selected a $selectedOption named $selectedDropdownValue.",
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
                 }
             }
         }
