@@ -13,6 +13,7 @@ import org.mapsteadtask.data.models.BuildingInfo
 
 class NetworkService {
 
+    // HttpClient initialization with JSON configuration
     private val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
@@ -22,13 +23,26 @@ class NetworkService {
         }
     }
 
+    // Function to fetch building information
     suspend fun getBuildingInfos(): List<BuildingInfo> {
-        val response: HttpResponse = client.get("https://rnd-interview.mapsted.com/GetBuildingData/")
+        val response: HttpResponse = client.get("${BASE_URL}${Endpoints.GET_BUILDING_DATA}")
         return response.body()
     }
 
+    // Function to fetch analytics data
     suspend fun getAnalyticsData(): List<AnalyticsData> {
-        val response: HttpResponse = client.get("https://rnd-interview.mapsted.com/GetAnalyticData/")
+        val response: HttpResponse = client.get("${BASE_URL}${Endpoints.GET_ANALYTIC_DATA}")
         return response.body()
+    }
+
+    companion object {
+        // Base URL for the API
+        private const val BASE_URL = "https://rnd-interview.mapsted.com/"
+
+        // API Endpoints
+        private object Endpoints {
+            const val GET_BUILDING_DATA = "GetBuildingData/"
+            const val GET_ANALYTIC_DATA = "GetAnalyticData/"
+        }
     }
 }
