@@ -82,6 +82,7 @@ fun MainScreen(viewModel: DataViewModel) {
                                     onClear = {
                                         // Clearing the selection
                                         selectedOption = null
+                                        selectedDropdownValue = null
                                     }
                                 )
                             }
@@ -101,11 +102,13 @@ fun MainScreen(viewModel: DataViewModel) {
                                     onClick = {
                                         selectedOption = option
                                         selectedDropdownValue = null
+                                        selectedDropdownValue = null
                                     },
                                     modifier = Modifier.weight(1f),
                                     onClear = {
                                         // Clearing the selection
                                         selectedOption = null
+                                        selectedDropdownValue = null
                                     }
                                 )
                             }
